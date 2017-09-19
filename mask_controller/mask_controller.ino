@@ -32,7 +32,7 @@ void setup()
 {
   Serial.begin(115200);
 
-  Serial.println("Bluefruit52 Central BLEUART Example");
+  Serial.println("Mask Controller - Serial Connected");
   Serial.println("-----------------------------------\n");
 
   
@@ -81,56 +81,56 @@ void scan_callback(ble_gap_evt_adv_report_t* report)
 /* Display the timestamp and device address */
   if (report->scan_rsp)
   {
-    Serial.printf("[SR%10d] Packet received from ", millis());
+    //Serial.printf("[SR%10d] Packet received from ", millis());
   }
   else
   {
-    Serial.printf("[ADV%9d] Packet received from ", millis());
+    //Serial.printf("[ADV%9d] Packet received from ", millis());
   }
-  Serial.printBuffer(report->peer_addr.addr, 6, ':');
-  Serial.print("\n");
+  //Serial.printBuffer(report->peer_addr.addr, 6, ':');
+  //Serial.print("\n");
 
   /* Raw buffer contents */
-  Serial.printf("%14s %d bytes\n", "PAYLOAD", report->dlen);
+  //Serial.printf("%14s %d bytes\n", "PAYLOAD", report->dlen);
   if (report->dlen)
   {
-    Serial.printf("%15s", " ");
-    Serial.printBuffer(report->data, report->dlen, '-');
-    Serial.println();
+    //Serial.printf("%15s", " ");
+    //Serial.printBuffer(report->data, report->dlen, '-');
+    //Serial.println();
   }
 
   /* RSSI value */
-  Serial.printf("%14s %d dBm\n", "RSSI", report->rssi);
+  //Serial.printf("%14s %d dBm\n", "RSSI", report->rssi);
 
   /* Adv Type */
-  Serial.printf("%14s ", "ADV TYPE");
+  //Serial.printf("%14s ", "ADV TYPE");
   switch (report->type)
   {
     case BLE_GAP_ADV_TYPE_ADV_IND:
-      Serial.printf("Connectable undirected\n");
+      //Serial.printf("Connectable undirected\n");
       break;
     case BLE_GAP_ADV_TYPE_ADV_DIRECT_IND:
-      Serial.printf("Connectable directed\n");
+      //Serial.printf("Connectable directed\n");
       break;
     case BLE_GAP_ADV_TYPE_ADV_SCAN_IND:
-      Serial.printf("Scannable undirected\n");
+      //Serial.printf("Scannable undirected\n");
       break;
     case BLE_GAP_ADV_TYPE_ADV_NONCONN_IND:
-      Serial.printf("Non-connectable undirected\n");
+      //Serial.printf("Non-connectable undirected\n");
       break;
   }
 
   /* Shortened Local Name */
   if(Bluefruit.Scanner.parseReportByType(report, BLE_GAP_AD_TYPE_SHORT_LOCAL_NAME, buffer, sizeof(buffer)))
   {
-    Serial.printf("%14s %s\n", "SHORT NAME", buffer);
+    //Serial.printf("%14s %s\n", "SHORT NAME", buffer);
     memset(buffer, 0, sizeof(buffer));
   }
 
   /* Complete Local Name */
   if(Bluefruit.Scanner.parseReportByType(report, BLE_GAP_AD_TYPE_COMPLETE_LOCAL_NAME, buffer, sizeof(buffer)))
   {
-    Serial.printf("%14s %s\n", "COMPLETE NAME", buffer);
+    //Serial.printf("%14s %s\n", "COMPLETE NAME", buffer);
     complete_name = (char*)buffer;
     memset(buffer, 0, sizeof(buffer));
   }
@@ -138,7 +138,7 @@ void scan_callback(ble_gap_evt_adv_report_t* report)
   /* TX Power Level */
   if (Bluefruit.Scanner.parseReportByType(report, BLE_GAP_AD_TYPE_TX_POWER_LEVEL, buffer, sizeof(buffer)))
   {
-    Serial.printf("%14s %i\n", "TX PWR LEVEL", buffer[0]);
+    //Serial.printf("%14s %i\n", "TX PWR LEVEL", buffer[0]);
     memset(buffer, 0, sizeof(buffer));
   }
 
@@ -146,56 +146,56 @@ void scan_callback(ble_gap_evt_adv_report_t* report)
   len = Bluefruit.Scanner.parseReportByType(report, BLE_GAP_AD_TYPE_16BIT_SERVICE_UUID_COMPLETE, buffer, sizeof(buffer));
   if ( len )
   {
-    printUuid16List(buffer, len);
+    //printUuid16List(buffer, len);
   }
 
   /* Check for UUID16 More Available List */
   len = Bluefruit.Scanner.parseReportByType(report, BLE_GAP_AD_TYPE_16BIT_SERVICE_UUID_MORE_AVAILABLE, buffer, sizeof(buffer));
   if ( len )
   {
-    printUuid16List(buffer, len);
+    //printUuid16List(buffer, len);
   }
 
   /* Check for UUID128 Complete List */
   len = Bluefruit.Scanner.parseReportByType(report, BLE_GAP_AD_TYPE_128BIT_SERVICE_UUID_COMPLETE, buffer, sizeof(buffer));
   if ( len )
   {
-    printUuid128List(buffer, len);
+    //printUuid128List(buffer, len);
   }
 
   /* Check for UUID128 More Available List */
   len = Bluefruit.Scanner.parseReportByType(report, BLE_GAP_AD_TYPE_128BIT_SERVICE_UUID_MORE_AVAILABLE, buffer, sizeof(buffer));
   if ( len )
   {
-    printUuid128List(buffer, len);
+    //printUuid128List(buffer, len);
   }  
 
   /* Check for BLE UART UUID */
   if ( Bluefruit.Scanner.checkReportForUuid(report, BLEUART_UUID_SERVICE) )
   {
-    Serial.printf("%14s %s\n", "BLE UART", "UUID Found!");
+    //Serial.printf("%14s %s\n", "BLE UART", "UUID Found!");
   }
 
   /* Check for DIS UUID */
   if ( Bluefruit.Scanner.checkReportForUuid(report, UUID16_SVC_DEVICE_INFORMATION) )
   {
-    Serial.printf("%14s %s\n", "DIS", "UUID Found!");
+    //Serial.printf("%14s %s\n", "DIS", "UUID Found!");
   }
 
   /* Check for Manufacturer Specific Data */
   len = Bluefruit.Scanner.parseReportByType(report, BLE_GAP_AD_TYPE_MANUFACTURER_SPECIFIC_DATA, buffer, sizeof(buffer));
   if (len)
   {
-    Serial.printf("%14s ", "MAN SPEC DATA");
-    Serial.printBuffer(buffer, len, '-');
-    Serial.println();
+    //Serial.printf("%14s ", "MAN SPEC DATA");
+    //Serial.printBuffer(buffer, len, '-');
+    //Serial.println();
     memset(buffer, 0, sizeof(buffer));
   }  
 
-  Serial.println();
+  //Serial.println();
 
   if(complete_name == "Mask") {
-    Serial.print("BLE UART service detected. Connecting ... ");
+    Serial.print("Mask detected. Connecting ... ");
     // Connect to device with bleuart service in advertising
     Bluefruit.Central.connect(report);
   } 
@@ -332,8 +332,12 @@ void readButtons() {
        b = b + ButtonRead;
        i++;
     }
-
-    ButtonRead = b/i;
+    if(i < 10) {
+      current = 0;
+      ButtonRead = 0;
+    } else {
+      ButtonRead = b/i;
+    }
     // grab the current state of the remote-buttons
     if (ButtonRead < 120) {
       current = 0;
@@ -359,17 +363,18 @@ void readButtons() {
   if(current == last)
     return;
 
-  if(current != 0 && last > 0)
+  if(current != 0 && last != 0)
     return;
     
   int32_t value = current;
   last = current;
-  Serial.print(ButtonRead);
-  Serial.print(": ");
-  Serial.println(value);
 
   if(current > 0 && uartUp())
     clientUart.print(s+'\n');
+
+  Serial.print(ButtonRead);
+  Serial.print(": ");
+  Serial.println(value);
 }
 
 bool uartUp() {
