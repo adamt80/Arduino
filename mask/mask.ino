@@ -25,6 +25,11 @@ unsigned int sample;
 // Used for averaging all the audio samples currently in the buffer
 uint8_t oldsum = 0;
 uint8_t faceMode = 0;
+uint8_t counter = 0;
+
+#ifndef _BV
+  #define _BV(bit) (1<<(bit))
+#endif
 
 #define MATRIX_EYES         0
 #define MATRIX_MOUTH_LEFT   1
@@ -508,6 +513,11 @@ void readBT() {
     if(buttnum == 4 && pressed) {
        drawDead();
     }
+    if(buttnum == 5 && pressed) {
+      faceMode = faceMode + 1;
+      if(faceMode > 1)
+        faceMode = 0;
+    }
   }
   //Text Input
   if(packetbuffer[1] == 'T') {
@@ -542,7 +552,9 @@ void loop() {
 
   if(faceMode == 0)
     drawFace(oldsum); 
-  
+  if(faceMode == 1)
+    drawHypno();
+    
   // Refresh all of the matrices in one quick pass
   for(uint8_t i=0; i<4; i++) matrix[i].writeDisplay();
 
@@ -566,6 +578,22 @@ void drawDead() {
       delay(20);
     }
     delay(500);
+}
+
+void drawHypno() {
+  for (uint8_t i=0; i<8; i++) {
+    // draw a diagonal row of pixels
+    for(uint8_t x = 0; x < 5; x++) {
+      matrix[x].displaybuffer[i] = _BV((counter+i) % 8) | _BV((counter+i+8) % 8);
+      matrix[x].writeDisplay();
+    }
+  }
+  // write the changes we just made to the display
+  
+  delay(20);
+
+  counter++;
+  if (counter >= 16) counter = 0;  
 }
 
 void drawFace(uint8_t os) {

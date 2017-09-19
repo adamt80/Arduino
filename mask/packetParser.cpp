@@ -12,7 +12,7 @@
 #define PACKET_LOCATION_LEN             (15)
 
 //    READ_BUFSIZE            Size of the read buffer for incoming packets
-#define READ_BUFSIZE                    (120)
+#define READ_BUFSIZE                    (43)
 
 
 /* Buffer to hold incoming characters */
@@ -74,7 +74,7 @@ uint8_t readPacket(BLEUart *ble_uart, uint16_t timeout)
   memset(packetbuffer, 0, READ_BUFSIZE);
 
   while (timeout--) {
-    if (replyidx >= 20) break;
+    if (replyidx >= READ_BUFSIZE) break;
     if ((packetbuffer[1] == 'A') && (replyidx == PACKET_ACC_LEN))
       break;
     if ((packetbuffer[1] == 'G') && (replyidx == PACKET_GYRO_LEN))
@@ -103,7 +103,6 @@ uint8_t readPacket(BLEUart *ble_uart, uint16_t timeout)
     }
     
     if (timeout == 0) break;
-    delay(1);
   }
 
   packetbuffer[replyidx] = 0;  // null term
