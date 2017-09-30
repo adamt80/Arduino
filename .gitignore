@@ -3,6 +3,7 @@ Thumbs.db
 ehthumbs.db
 
 libraries/
+hardware/
 
 # Folder config file
 Desktop.ini
@@ -47,3 +48,7 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+hardware/espressif/arduino-esp32/variants/widora-air/pins_arduino.h
+hardware/espressif/arduino-esp32/variants/pocket_32/pins_arduino.h
+hardware/espressif/arduino-esp32/variants/onehorse32dev/pins_arduino.h
+hardware/espressif/arduino-esp32/variants/nano32/pins_arduino.h
